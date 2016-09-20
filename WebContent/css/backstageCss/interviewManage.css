@@ -1,0 +1,34 @@
+.manage-menu li{
+	width: 25%;
+}
+.operationTd{
+	position: relative;
+}
+.operationTd .adjustCont{
+	position: absolute;
+	padding: 10px;
+	border: 1px solid #E7E7E7;
+	background-color: #FFFFFF;
+	box-shadow: 1px 1px 1px #E3E3E3;
+	border-radius: 4px;
+	left: -8px;
+	top: 45px;
+	z-index: 10;
+}
+.operationTd .adjustCont select{
+	height: 30px;
+	width: 100px;
+	line-height: 30px;
+	border: 1px solid #6AD4F3;
+}
+.operationTd .adjustCont button{
+	margin: 0 5px;
+	padding: 0 10px;
+	border: 1px solid #6AD4F3;
+	height: 30px;
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}
+.operationTd .adjustCont button:hover{
+	background-color: #01B3E8;
+}

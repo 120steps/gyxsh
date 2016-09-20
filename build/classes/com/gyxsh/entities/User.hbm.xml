@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-14 11:08:47 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gyxsh.entities.User" table="USER">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        
+        <property name="username" type="java.lang.String" unique="true">
+            <column name="USERNAME" />
+        </property>
+        
+        <property name="password" type="java.lang.String">
+            <column name="PASSWORD" />
+        </property>
+        
+        <one-to-one name="student" cascade="none" class="com.gyxsh.entities.Student"></one-to-one>
+        
+        <many-to-one name="userStatus" class="com.gyxsh.entities.UserStatus" 
+        fetch="join" lazy="false" cascade="none">
+            <column name="USER_STATUS" />
+        </many-to-one>
+        
+        <property name="able" type="int">
+            <column name="ABLE" />
+        </property>
+    </class>
+</hibernate-mapping>

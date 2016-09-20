@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-14 11:08:47 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gyxsh.entities.Student" table="STUDENT">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            
+            <!-- 使用外键的方式来生成当前的主键 -->
+            <generator class="foreign">
+          	  <!-- property属性指定使用当前持久化类的哪一个属性的主键作为外键 -->
+            	<param name="property">user</param>
+            </generator>
+        </id>
+        
+        <property name="name" type="java.lang.String">
+            <column name="NAME" />
+        </property>
+        
+        <property name="gender" type="java.lang.String">
+            <column name="GENDER" />
+        </property>
+        
+        <property name="place" type="java.lang.String">
+            <column name="PLACE" />
+        </property>
+        
+        <property name="polity" type="java.lang.String">
+            <column name="POLITY" />
+        </property>
+        
+        <property name="nation" type="java.lang.String">
+            <column name="NATION" />
+        </property>
+        
+        <property name="birth" type="java.util.Date">
+            <column name="BIRTH" />
+        </property>
+        
+        <property name="clazz" type="java.lang.String">
+            <column name="CLAZZ" />
+        </property>
+        
+        <property name="studentNum" type="java.lang.String">
+            <column name="STUDENT_NUM" />
+        </property>
+        
+        <property name="dormitory" type="java.lang.String">
+            <column name="DORMITORY" />
+        </property>
+        
+        <property name="phone" type="java.lang.String">
+            <column name="PHONE" />
+        </property>
+        
+        <property name="qq" type="java.lang.String">
+            <column name="QQ" />
+        </property>
+        
+        <property name="email" type="java.lang.String">
+            <column name="EMAIL" />
+        </property>
+        
+        <one-to-one name="user" class="com.gyxsh.entities.User"
+        constrained="true" ></one-to-one>
+        
+        <!-- Member类 -->
+		<joined-subclass name="com.gyxsh.entities.Member">
+			<key column="MEMBER_ID"></key>
+			
+			<many-to-one name="merStatus" class="com.gyxsh.entities.MerStatus"
+				fetch="join" lazy="false">
+				<column name="MER_STATUS" />
+			</many-to-one>
+			
+			<many-to-one name="merDepartment" class="com.gyxsh.entities.Department"
+				fetch="join" lazy="false">
+				<column name="MER_DEPARTMENT" />
+			</many-to-one>
+			
+			<property name="able" type="int">
+            	<column name="ABLE" />
+        	</property>
+		</joined-subclass>
+		
+		<!-- Applicant类 -->
+		<joined-subclass name="com.gyxsh.entities.Applicant">
+			<key column="APPLICANT_ID"></key>
+			
+			<many-to-one name="aptFirstTag" class="com.gyxsh.entities.Department"
+				fetch="join" lazy="false" >
+				<column name="APT_FIRST_TAG" />
+			</many-to-one>
+			
+			<many-to-one name="aptSecondTag" class="com.gyxsh.entities.Department"
+				fetch="join" lazy="false" >
+				<column name="APT_SECOND_TAG" />
+			</many-to-one>
+			
+			<many-to-one name="preHandleDept" class="com.gyxsh.entities.Department"
+				fetch="join" lazy="false" >
+				<column name="PRE_HANDLE_DEPT" />
+			</many-to-one>
+			
+			<many-to-one name="nowHandleDept" class="com.gyxsh.entities.Department"
+				fetch="join" lazy="false" >
+				<column name="NOW_HANDLE_DEPT" />
+			</many-to-one>
+			
+			<property name="aptOtherOrg" type="java.lang.String">
+				<column name="APT_OTHER_ORG" />
+			</property>
+			
+			<property name="aptSpeciality" type="java.lang.String">
+				<column name="APT_SPECIALITY" />
+			</property>
+			
+			<property name="aptInterest" type="java.lang.String">
+				<column name="APT_INTEREST" />
+			</property>
+			
+			<property name="aptExperience" type="java.lang.String">
+				<column name="APT_EXPERIENCE" />
+			</property>
+			
+			<property name="aptKnow" type="java.lang.String">
+				<column name="APT_KNOW" />
+			</property>
+			
+			<property name="aptExpectation" type="java.lang.String">
+				<column name="APT_EXPECTATION" />
+			</property>
+			
+			<many-to-one name="aptStatus" class="com.gyxsh.entities.AptStatus"
+				fetch="join" lazy="false" >
+				<column name="APT_STATUS" />
+			</many-to-one>
+			
+			<property name="aptEmailed" type="int">
+            	<column name="APT_EMAILED" />
+        	</property>
+        	
+        	<property name="able" type="int">
+            	<column name="ABLE" />
+        	</property>
+        	
+        	<property name="imgSrc" type="java.lang.String">
+            	<column name="IMG_SRC" />
+        	</property>
+		</joined-subclass>
+        
+    </class>
+</hibernate-mapping>

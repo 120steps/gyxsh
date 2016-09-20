@@ -1,0 +1,77 @@
+body{
+	background-color: #F1F0F0;
+}
+.content{
+	margin-top: 30px;
+	padding: 0;
+	background-color: #FFFFFF;
+	border: 1px solid #E7E7E7;
+	border-radius: 4px;
+    box-shadow: inset 0px 1px 1px rgba(0,0,0,.3);
+    min-height: 650px;
+}
+.head-menu ul{
+	padding-left: 0;
+}
+.head-menu li{
+	list-style: none;
+	float: left;
+	width: 50%;
+	border-bottom: 2px solid #E7E7E7;
+}
+.head-menu li.active{
+	border-color: #6AD4F3;
+}
+.head-menu li.active a{
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}
+.head-menu li a{
+	display: block;
+	height: 40px;
+	line-height: 40px;
+	background-color: #FFFFFF;
+	text-align: center;
+	font-size: 20px;
+	text-decoration: none;
+	color: #6AD4F3;
+}
+.head-menu li:hover{
+	border-color: #6AD4F3;
+}
+.center{
+	padding: 19px;
+}
+.formBtn{
+	margin-top: 20px;
+	text-align: center;
+}
+.form-horizontal .danger-label{
+	font-weight: normal;
+	text-align: left;
+	color: #EA3835;
+	/*display: none;*/
+}
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}
+.dropdown-menu>.active>a,.dropdown-menu>.active>a:focus,.dropdown-menu>.active>a:hover{
+	background-color: #6AD4F3;
+}
+.dropdown-menu>.active>a{
+	outline: 1px dotted #FFFFFF;
+	outline-offset: -2px;
+}
+.danger-state label{
+	color: #EA3835;
+}
+.danger-state input,.danger-state .input-group input,.danger-state .input-group span,.danger-state textarea,.danger-state select{
+	border-color: #EA3835;
+}
+.danger-state .danger-label{
+	display: inline-block;
+}
+.bootstrap-select>.dropdown-info{
+	border-color: #EA3835;
+}

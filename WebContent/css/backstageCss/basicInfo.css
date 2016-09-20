@@ -1,0 +1,79 @@
+.right-bar-cont{
+	padding: 0 15px;
+}
+.form-table{
+	background-color: #FFFFFF;
+	padding: 0;
+	padding-bottom: 15px;
+	border-radius: 4px;
+	min-height: 500px;
+}
+.manage-menu{
+	margin-bottom: 20px;
+}
+.manage-menu ul{
+	padding-left: 0;
+	
+}
+.manage-menu li{
+	list-style: none;
+	float: left;
+	width: 50%;
+	border-bottom: 2px solid #E7E7E7;
+}
+.manage-menu li:hover{
+	border-color: #6AD4F3;
+}
+.manage-menu li.active{
+	border-color: #6AD4F3;
+}
+.manage-menu li a{
+	display: block;
+	text-align: center;
+	padding: 10px;
+	color: #6AD4F3;
+}
+.manage-menu li a:hover{
+	text-decoration: none;
+}
+.manage-menu li.active a{
+	color: #FFFFFF;
+	background-color: #6AD4F3;
+	text-decoration: none;
+}
+.form-horizontal .danger-label{
+	font-weight: normal;
+	text-align: left;
+	color: #EA3835;
+	/* display: none; */
+}
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}
+.dropdown-menu>.active>a,.dropdown-menu>.active>a:focus,.dropdown-menu>.active>a:hover{
+	background-color: #6AD4F3;
+}
+.dropdown-menu>.active>a{
+	outline: 1px dotted #FFFFFF;
+	outline-offset: -2px;
+}
+.formBtn{
+	text-align: center;
+	margin: 30px 0;
+}
+.formBtn .btn{
+	margin: 0 10px;
+}
+.danger-state label{
+	color: #EA3835;
+}
+.danger-state input,.danger-state .input-group input,.danger-state .input-group span,.danger-state textarea,.danger-state select{
+	border-color: #EA3835;
+}
+.danger-state .danger-label{
+	display: inline-block;
+}
+.bootstrap-select>.dropdown-info{
+	border-color: #EA3835;
+}

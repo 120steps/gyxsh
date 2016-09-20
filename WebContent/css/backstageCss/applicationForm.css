@@ -1,0 +1,38 @@
+body{
+	background-color: #F1F0F0;
+}
+.formCont{
+	margin-top: 30px;
+	padding: 19px;
+	background-color: #FFFFFF;
+	border: 1px solid #E7E7E7;
+	border-radius: 4px;
+    box-shadow: inset 0px 1px 1px rgba(0,0,0,.3);
+}
+.formCont h3{
+	padding-left: 20px;
+}
+.formCont .item-tag{
+	text-align: right;
+}
+.formCont .form-group label{
+	font-size: 16px;
+}
+@media only screen and (max-width: 768px) {
+	.formCont .item-tag{
+		width: 20%;
+		text-align: right;
+	}
+	.formCont .item-value{
+		width: 70%;
+	}
+}
+
+.formCont .division{
+	border-bottom: 1px solid #E7E7E7;
+}
+.col-sm-3 img{
+	width: 140px;
+	height: 170px;
+	border: 1px solid #C7C3C3;
+}

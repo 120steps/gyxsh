@@ -1,0 +1,336 @@
+*{
+	font-family: "微软雅黑";
+}
+body{
+	background-color: #EBEBEB;
+}
+.header{
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 50px;
+	background-color: #6AD4F3;
+}
+/*.headContent a{
+	display: inline-block;
+}
+.headContent a:hover{
+	color: #0164c7;
+}*/
+.headContent img{
+	width: 50px;
+	height: 50px;
+}
+.headContent .login_a{
+	line-height: 50px;
+	font-size: 14px;
+}
+.headContent .login_a:hover{
+	color: #FFFFFF;
+}
+/*.headContent .loginBtn{
+	width: 150px;
+	height: 40px;
+	padding: 5px 15px;
+	margin-top: 5px;
+	border-radius: 30px;
+	border: 2px solid #FFFFFF;
+	outline: 0;
+	
+	font-size: 20px;
+	color: #FFFFFF;
+	background-color: #6AD4F3;
+}
+.headContent .loginBtn:hover{
+	color: #6AD4F3;
+	background-color: #FFFFFF;
+}*/
+#fp-nav ul li .fp-tooltip{
+	color: #0164c7;
+}
+#fp-nav ul li a span, .fp-slidesNav ul li a span{
+	background-color: #0164c7;
+}
+.indexPage{
+	background-image: url(../img/banner.jpg);
+	background-position: center center;
+	background-attachment: fixed; 
+	background-size: cover;
+	opacity: 0.7;
+	position: relative;
+	text-align: center;
+}
+.indexPage .indexTitle{
+	position: absolute;
+	top: 60px;
+	width: 100%;
+	color: #FFFFFF;
+	font-size: 30px;
+}
+.indexPage .indexText{
+	position: absolute;
+	top: 500px;
+	width: 100%;
+	color: #FFFFFF;
+	font-size: 16px;
+}
+/*section secretary*/
+.sectionHead{
+	/*margin-top: 30px;*/
+	background-color: #FFFFFF;
+	height: 50px;
+	padding: 0 20px;
+}
+.sectionHead h3{
+	margin: 0;
+	line-height: 50px;
+	border-bottom: 2px solid #F15235;
+	margin-bottom: -2px;
+}
+.sectionHead a{
+	display: block;
+	font-size: 20px;
+	color: #F15235;
+	line-height: 50px;
+}
+.sectionContent{
+	margin-top: 10px;
+	background-color: #FFFFFF;
+	min-height: 500px;
+	overflow-x: hidden;
+}
+.sectionContent .imgBox{
+	border-right: 1px solid #F15235;
+	padding: 20px 10px;
+	margin-top: 50px;
+	margin-right: -1px;
+}
+.sectionContent .imgBox img{
+	width: 340px;
+	height: 360px;
+}
+.sectionContent .rightTop{
+	height: 100px;
+	border-bottom: 1px solid #F15235;
+}
+.rightTop .rightTopContent{
+	margin: 5px 0 ;
+}
+.title{
+	border-bottom: 1px solid #EBEBEB;
+	height: 40px;
+	margin-top: 10px;
+}
+.title h3{
+	font-size: 20px;
+	line-height: 40px;
+	margin: 0;
+	padding-right: 20px; 
+	border-bottom: 1px solid #F15235;
+	margin-bottom: -1px;
+}
+.labels{
+	height: 40px;
+	line-height: 40px;
+}
+.labels span{
+	font-size: 16px;
+}
+.contact{
+	height: 40px;
+	line-height: 40px;
+}
+.contact span{
+	display: block;
+	font-size: 16px;
+}
+.contact span i{
+	font-size: 20px;
+	color: #F15235;
+}
+.rightCenter .rightTopContent{
+	margin-top: 10px;
+}
+.rightCenter .textContent{
+	padding-top: 10px;
+}
+.textContent p{
+	font-size: 16px;
+	line-height: 25px;
+}
+.sectionFoot{
+	margin-top: 10px;
+	background-color: #FFFFFF;
+	height: 50px;
+	padding: 0 20px;
+}
+.sectionFoot a{
+	display: block;
+	font-size: 20px;
+	color: #F15235;
+	line-height: 50px;
+}
+
+/*section literary*/
+.sectionHead .literary_h{
+	border-bottom: 2px solid #D11514;
+}
+.sectionHead .literary_a{
+	color: #D11514;
+}
+.sectionContent .literary_img{
+	border-right: 1px solid #D11514;
+}
+.sectionContent .literary_top{
+	border-bottom: 1px solid #D11514;
+}
+.title .literary_h3{
+	border-bottom: 1px solid #D11514;
+}
+.contact span .literary_i{
+	color: #D11514;
+}
+.sectionFoot .literary_foot_a{
+	color: #D11514;
+}
+
+/*section life*/
+.sectionHead .life_h{
+	border-bottom: 2px solid #84BE2B;
+}
+.sectionHead .life_a{
+	color: #84BE2B;
+}
+.sectionContent .life_img{
+	border-right: 1px solid #84BE2B;
+}
+.sectionContent .life_top{
+	border-bottom: 1px solid #84BE2B;
+}
+.title .life_h3{
+	border-bottom: 1px solid #84BE2B;
+}
+.contact span .life_i{
+	color: #84BE2B;
+}
+.sectionFoot .life_foot_a{
+	color: #84BE2B;
+}
+
+/*section pe*/
+
+.sectionHead .pe_h{
+	border-bottom: 2px solid #FCE732;
+}
+.sectionHead .pe_a{
+	color: #FCE732;
+}
+.sectionContent .pe_img{
+	border-right: 1px solid #FCE732;
+}
+.sectionContent .pe_top{
+	border-bottom: 1px solid #FCE732;
+}
+.title .pe_h3{
+	border-bottom: 1px solid #FCE732;
+}
+.contact span .pe_i{
+	color: #FCE732;
+}
+.sectionFoot .pe_foot_a{
+	color: #FCE732;
+}
+
+
+/*section learn*/
+
+.sectionHead .learn_h{
+	border-bottom: 2px solid #37B3E6;
+}
+.sectionHead .learn_a{
+	color: #37B3E6;
+}
+.sectionContent .learn_img{
+	border-right: 1px solid #37B3E6;
+}
+.sectionContent .learn_top{
+	border-bottom: 1px solid #37B3E6;
+}
+.title .learn_h3{
+	border-bottom: 1px solid #37B3E6;
+}
+.contact span .learn_i{
+	color: #37B3E6;
+}
+.sectionFoot .learn_foot_a{
+	color: #37B3E6;
+}
+
+
+/*section girl*/
+
+.sectionHead .girl_h{
+	border-bottom: 2px solid #D21FD3;
+}
+.sectionHead .girl_a{
+	color: #D21FD3;
+}
+.sectionContent .girl_img{
+	border-right: 1px solid #D21FD3;
+}
+.sectionContent .girl_top{
+	border-bottom: 1px solid #D21FD3;
+}
+.title .girl_h3{
+	border-bottom: 1px solid #D21FD3;
+}
+.contact span .girl_i{
+	color: #D21FD3;
+}
+.sectionFoot .girl_foot_a{
+	color: #D21FD3;
+}
+
+/*section connection*/
+
+.sectionHead .connection_h{
+	border-bottom: 2px solid #466FED;
+}
+.sectionHead .connection_a{
+	color: #466FED;
+}
+.sectionContent .connection_img{
+	border-right: 1px solid #466FED;
+}
+.sectionContent .connection_top{
+	border-bottom: 1px solid #466FED;
+}
+.title .connection_h3{
+	border-bottom: 1px solid #466FED;
+}
+.contact span .connection_i{
+	color: #466FED;
+}
+.sectionFoot .connection_foot_a{
+	color: #466FED;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

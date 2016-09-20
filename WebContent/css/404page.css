@@ -1,0 +1,29 @@
+body{
+	background-color: #e6e8ea;
+}
+.content{
+	text-align: center;
+	margin-top: 200px;
+}
+.content h1{
+	font-size: 90px;
+	margin: 15px 0;
+}
+.content p{
+	font-size: 24px;
+	margin: 15px 0;
+}
+.content a{
+	font-size: 20px;
+	border-radius: 0;
+}
+.btn-default {
+    color: #a6a6a6;
+    background: #f1f1f1;
+    border: 1px solid #d4d4d4;
+}
+.btn-default:hover{
+	border-color: #000000;
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}

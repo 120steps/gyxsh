@@ -1,0 +1,48 @@
+.content{
+	margin-top: 10px;
+	min-height: 500px;
+	background-color: #FFFFFF;
+	border-radius: 4px;
+	padding: 20px;
+}
+.content .timeCont{
+	width: 60%;
+	margin-left: 20%;
+	margin-top: 15%;
+	margin-bottom: 15%;
+}
+.timeCont .timeItem{
+	margin-bottom: 15px;
+}
+.timeItem label{
+	font-weight: normal;
+	font-size: 18px;
+}
+.timeItem .itemLeft{
+	text-align: right;
+}
+.timeItem p{
+	padding: 20px;
+	text-align: center;
+}
+@media only screen and (min-width: 768px) {
+	.modal-dialog {
+    width: 800px;
+    margin: 50px auto;
+	}
+}
+.form-horizontal .danger-label{
+	font-weight: normal;
+	text-align: left;
+	color: #EA3835;
+	/* display: none; */
+}
+.danger-state label{
+	color: #EA3835;
+}
+.danger-state input,.danger-state .input-group input,.danger-state .input-group span,.danger-state textarea,.danger-state select{
+	border-color: #EA3835;
+}
+.danger-state .danger-label{
+	display: inline-block;
+}

@@ -1,0 +1,28 @@
+.manage-menu{
+	margin-bottom: 10px;
+}
+.department-menu{
+	margin-bottom: 30px;
+	
+}
+.btn-group .btn.active{
+	box-shadow: none;
+}
+.btn-group .btn-default.active{
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+	border-color: #6AD4F3;
+}
+.btn-group .btn-default.active:hover{
+	background-color: #01B3E8;
+	color: #FFFFFF;
+	border-color: #6AD4F3;
+}
+.btn-group .btn-default:hover{
+	background-color: #FFFFFF;
+	color: #6AD4F3;
+	border-color: #6AD4F3;
+}
+.btn-group .btn-default{
+	border-color: #6AD4F3;
+}

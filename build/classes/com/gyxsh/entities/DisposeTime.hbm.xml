@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-21 20:48:15 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gyxsh.entities.DisposeTime" table="DISPOSE_TIME">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="native" />
+        </id>
+        <property name="begin" type="java.util.Date">
+            <column name="BEGIN" />
+        </property>
+        <property name="end" type="java.util.Date">
+            <column name="END" />
+        </property>
+    </class>
+</hibernate-mapping>

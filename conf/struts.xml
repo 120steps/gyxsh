@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="false" />
+    <constant name="struts.devMode" value="true" />
+    <!-- 设置最大的上传文件大小 -->
+	<constant name="struts.multipart.maxSize" value="9000000"/>
+	
+    <package name="default" namespace="/" extends="struts-default">
+		
+		<interceptors>
+			<!-- 登录拦截器 管理员 -->
+			<interceptor name="admin" class="com.gyxsh.interceptor.AdminInterceptor"></interceptor>
+			<!-- 登录拦截器 主席团 -->
+			<interceptor name="member" class="com.gyxsh.interceptor.MemberInterceptor"></interceptor>
+			<!--登录拦截器 部长  -->
+			<interceptor name="secretary" class="com.gyxsh.interceptor.SecretaryInterceptor"></interceptor>
+			<!-- 登录拦截器 干事、副部长 -->
+			<interceptor name="cadre" class="com.gyxsh.interceptor.CadreInterceptor"></interceptor>
+			<!-- 登录拦截器 申请者 -->
+			<interceptor name="applicant" class="com.gyxsh.interceptor.ApplicantInterceptor"></interceptor>
+			
+			<!-- 招新系统 拦截器 -->
+			<interceptor name="enroll" class="com.gyxsh.interceptor.EnrollInterceptor"></interceptor>
+			<!-- 处理系统 拦截器 -->
+			<interceptor name="dispose" class="com.gyxsh.interceptor.DisposeInterceptor"></interceptor>
+			
+			<!-- 登录拦截器的配置 -->
+			<interceptor-stack name="sevenStack">
+				<!-- 将登录验证拦截加入默认的拦截器中 -->
+				<interceptor-ref name="admin">
+					<param name="includeMethods">admin*,*Admin</param>
+				</interceptor-ref>
+				<interceptor-ref name="member">
+					<param name="includeMethods">
+						merHandle*,*Mer,*hairpersonLogin,mer*BasicInfo
+						,merChangePassword,merEnrollTime*,merDisposeTime*
+						,merShowMember*,merCreateMember*
+					</param>
+				</interceptor-ref>
+				<interceptor-ref name="secretary">
+					<param name="includeMethods">sec*,*Sec</param>
+				</interceptor-ref>
+				<interceptor-ref name="cadre">
+					<param name="includeMethods">cad*,viceMinisterLogin</param>
+				</interceptor-ref>
+				<interceptor-ref name="applicant">
+					<param name="includeMethods">
+						aptModify*,aptShow,aptShowStatus,aptChangePassword,
+						createWordSingle
+					</param>
+				</interceptor-ref>
+				<interceptor-ref name="enroll">
+					<param name="includeMethods">aptInput,aptRegister,aptModify*</param>
+				</interceptor-ref>
+				<interceptor-ref name="dispose">
+					<param name="includeMethods">
+					*HandleOnePass,*HandleOneOut,*HandleTwo*,*HandleThree*,
+					*HandleFour*,*HandleFive*,*HandleSix*,*HandleSeven*,
+					*HandleEight*,*HandleNine*,*HandleFail*,email*
+					</param>
+				</interceptor-ref>
+				<interceptor-ref name="paramsPrepareParamsStack"></interceptor-ref>
+			</interceptor-stack>
+			
+			
+			<!-- 定义新的拦截器栈, 配置 prepare 拦截器栈的 alwaysInvokePrepare 参数值为 false -->
+			<interceptor-stack name="noPreStack">
+				<interceptor-ref name="sevenStack">
+					<param name="prepare.alwaysInvokePrepare">false</param>
+				</interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		
+		<!-- 使用新的拦截器栈 -->
+		<default-interceptor-ref name="noPreStack"></default-interceptor-ref>
+		
+		<!-- 登录拦截器的中login配置 -->
+		<global-results>
+			<result name="login" >/login.jsp</result>
+			<result name="error">/systemClose.jsp</result>
+		</global-results>
+		
+		
+		<!--  
+			Spring 整合 Struts2 时, 在 Struts2 中配置的 Spring 的 Action 的 class 需要指向 IOC 容器中该 bean 的 id
+		-->
+		<!-- applicantAction -->
+		<!-- 报名表填写/预览信息/预览状态/修改信息 -->
+		<action name="apt*" class="applicantAction" method="apt{1}">
+			<result name="input">/applicationForm.jsp</result>
+			<result name="aptInput">/applicationForm.jsp</result>
+			<result name="aptRegister" type="redirect">/login.jsp?register=success</result>
+			<result name="aptShow">/backstagePages/applicant/applicationPreview.jsp</result>
+			<result name="aptShowStatus">/backstagePages/applicant/applyStatus.jsp</result>
+			<result name="aptModify">/backstagePages/applicant/applicationModify.jsp</result>
+			<result name="aptChangePassword">/login.jsp</result>
+			<result name="aptModifySave" type="redirect">/aptModify</result>
+		</action>
+		
+		<!-- userAction -->
+		<!-- 登录 分为管理员、学生会成员、申请者 -->
+		<action name="login" class="userAction" method="login">
+			<result name="adminLogin" type="redirect">/adminHandleOne?deptId=0</result>
+			<result name="merLogin" type="redirect">/merLogin</result>
+			<result name="aptLogin" type="redirect">/aptShowStatus</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		
+		<!-- memberHandleAction -->
+		<!-- 学生会成员 登录 -->
+		<action name="merLogin" class="memberHandleAction" method="merLogin">
+			<result name="chairpersonLogin" type="redirect">/merHandleOne?deptId=0</result>
+			<result name="viceChairpersonLogin" type="redirect">/merHandleOne?deptId=0</result>
+			<result name="ministerLogin" type="redirect">/secHandleOne</result>
+			<result name="viceMinisterLogin" type="redirect">/cadHandleOne</result>
+			<result name="cadre" type="redirect">/cadHandleOne</result>
+		</action>
+		
+		<!-- 处理申请者(按状态从One 到  Nine) -->
+		<action name="merHandleOne*" class="memberHandleAction" method="merHandleOne{1}">
+			<result name="merHandleOne">/backstagePages/presidium/applicationFormManage-untreated.jsp</result>
+			<result name="merHandleOnePass" type="redirect">/merHandleOne?deptId=${deptId}</result>
+			<result name="merHandleOneOut" type="redirect">/merHandleOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleTwo*" class="memberHandleAction" method="merHandleTwo{1}">
+			<result name="merHandleTwo">/backstagePages/presidium/applicationFormManage-passed.jsp</result>
+			<result name="merHandleTwoOut" type="redirect">/merHandleTwo?deptId=${deptId}</result>
+			<result name="merHandleTwoOne">/backstagePages/presidium/firstInterview-untreated.jsp</result>
+			<result name="merHandleTwoOnePass" type="redirect">/merHandleTwoOne?deptId=${deptId}</result>
+			<result name="merHandleTwoOneOut" type="redirect">/merHandleTwoOne?deptId=${deptId}</result>
+			<result name="merHandleTwoOneAdjusted">/backstagePages/presidium/firstInterview-adjusted.jsp</result>
+			<result name="merHandleTwoOneAdjust" type="redirect">/merHandleTwoOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleThree*" class="memberHandleAction" method="merHandleThree{1}">
+			<result name="merHandleThree">/backstagePages/presidium/applicationFormManage-failed.jsp</result>
+			<result name="merHandleThreePass" type="redirect">/merHandleThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleFour*" class="memberHandleAction" method="merHandleFour{1}">
+			<result name="merHandleFourOne">/backstagePages/presidium/firstInterview-passed.jsp</result>
+			<result name="merHandleFourOneOut" type="redirect">/merHandleFourOne?deptId=${deptId}</result>
+			<result name="merHandleFourTwo">/backstagePages/presidium/secondInterview-untreated.jsp</result>
+			<result name="merHandleFourTwoAdjust" type="redirect">/merHandleFourTwo?deptId=${deptId}</result>
+			<result name="merHandleFourTwoPass" type="redirect">/merHandleFourTwo?deptId=${deptId}</result>
+			<result name="merHandleFourTwoOut" type="redirect">/merHandleFourTwo?deptId=${deptId}</result>
+			<result name="merHandleFourTwoAdjusted">/backstagePages/presidium/secondInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="merHandleFive*" class="memberHandleAction" method="merHandleFive{1}">
+			<result name="merHandleFiveOne">/backstagePages/presidium/firstInterview-failed.jsp</result>
+			<result name="merHandleFiveOnePass" type="redirect">/merHandleFiveOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleSix*" class="memberHandleAction" method="merHandleSix{1}">
+			<result name="merHandleSixTwo">/backstagePages/presidium/secondInterview-passed.jsp</result>
+			<result name="merHandleSixTwoOut" type="redirect">/merHandleSixTwo?deptId=${deptId}</result>
+			<result name="merHandleSixThree">/backstagePages/presidium/thirdInterview-untreated.jsp</result>
+			<result name="merHandleSixThreeAdjusted">/backstagePages/presidium/thirdInterview-adjusted.jsp</result>
+			<result name="merHandleSixThreeAdjust" type="redirect">/merHandleSixThree?deptId=${deptId}</result>
+			<result name="merHandleSixThreePass" type="redirect">/merHandleSixThree?deptId=${deptId}</result>
+			<result name="merHandleSixThreeOut" type="redirect">/merHandleSixThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleSeven*" class="memberHandleAction" method="merHandleSeven{1}">
+			<result name="merHandleSevenTwo">/backstagePages/presidium/secondInterview-failed.jsp</result>
+			<result name="merHandleSevenTwoPass" type="redirect">/merHandleSevenTwo?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleEight*" class="memberHandleAction" method="merHandleEight{1}">
+			<result name="merHandleEightThree">/backstagePages/presidium/thirdInterview-passed.jsp</result>
+			<result name="merHandleEightThreeOut" type="redirect">/merHandleEightThree?deptId=${deptId}</result>
+			<result name="merHandleEightFour">/backstagePages/presidium/passed.jsp</result>
+			<result name="merHandleEightFourTurn" type="redirect">/merHandleEightFour?deptId=${deptId}</result>
+			<result name="merHandleEightFourTurnAll" type="redirect">/merHandleEightFour?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleNine*" class="memberHandleAction" method="merHandleNine{1}">
+			<result name="merHandleNineThree">/backstagePages/presidium/thirdInterview-failed.jsp</result>
+			<result name="merHandleNineThreePass" type="redirect">/merHandleNineThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="merHandleFailFour*" class="memberHandleAction" method="merHandleFailFour{1}">
+			<result name="merHandleFailFour">/backstagePages/presidium/failed.jsp</result>
+			<result name="merHandleFailFourDes" type="redirect">/merHandleFailFour?deptId=${deptId}</result>
+			<result name="merHandleFailFourDesAll" type="redirect">/merHandleFailFour?deptId=${deptId}</result>
+		</action>
+		
+		<!-- 发送邮件 -->
+		<action name="email*Mer" class="sendEmailAction" method="email{1}Mer">
+			<result name="emailSingleTwoMer" type="redirect">/merHandleTwo?deptId=${deptId}</result>
+			<result name="emailTwoMer" type="redirect">/merHandleTwo?deptId=${deptId}</result>
+			<result name="emailSingleThreeMer" type="redirect">/merHandleThree?deptId=${deptId}</result>
+			<result name="emailThreeMer" type="redirect">/merHandleThree?deptId=${deptId}</result>
+			
+			<result name="emailSingleTwoAdjustedMer" type="redirect">/merHandleTwoOneAdjusted?deptId=${deptId}</result>
+			<result name="emailTwoAdjustedMer" type="redirect">/merHandleTwoOneAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleFourMer" type="redirect">/merHandleFourOne?deptId=${deptId}</result>
+			<result name="emailFourMer" type="redirect">/merHandleFourOne?deptId=${deptId}</result>
+			<result name="emailSingleFiveMer" type="redirect">/merHandleFiveOne?deptId=${deptId}</result>
+			<result name="emailFiveMer" type="redirect">/merHandleFiveOne?deptId=${deptId}</result>
+			
+			<result name="emailSingleFourAdjustedMer" type="redirect">/merHandleFourTwoAdjusted?deptId=${deptId}</result>
+			<result name="emailFourAdjustedMer" type="redirect">/merHandleFourTwoAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleSixMer" type="redirect">/merHandleSixTwo?deptId=${deptId}</result>
+			<result name="emailSixMer" type="redirect">/merHandleSixTwo?deptId=${deptId}</result>
+			<result name="emailSingleSevenMer" type="redirect">/merHandleSevenTwo?deptId=${deptId}</result>
+			<result name="emailSevenMer" type="redirect">/merHandleSevenTwo?deptId=${deptId}</result>
+			
+			<result name="emailSingleSixAdjustedMer" type="redirect">/merHandleSixThreeAdjusted?deptId=${deptId}</result>
+			<result name="emailSixAdjustedMer" type="redirect">/merHandleSixThreeAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleEightMer" type="redirect">/merHandleEightThree?deptId=${deptId}</result>
+			<result name="emailEightMer" type="redirect">/merHandleEightThree?deptId=${deptId}</result>
+			<result name="emailSingleNineMer" type="redirect">/merHandleNineThree?deptId=${deptId}</result>
+			<result name="emailNineMer" type="redirect">/merHandleNineThree?deptId=${deptId}</result>
+		</action>
+		
+		<!-- 显示申请表 -->
+		<action name="merAptShow" class="memberHandleAction" method="merAptShow">
+			<result name="merAptShow">/backstagePages/applicationForm.jsp</result>
+		</action>
+		
+		<!-- 设置报名系统时间 -->
+		<action name="merEnrollTime*" class="enrollTimeAction" method="merEnrollTime{1}">
+			<result name="merEnrollTimeShow">/backstagePages/presidium/setApplyTime.jsp</result>
+			<result name="merEnrollTimeSet" type="redirect">/merEnrollTimeShow</result>
+			<result name="input">/backstagePages/presidium/setApplyTime.jsp</result>
+		</action>
+		
+		<!-- 设置处理系统时间 -->
+		<action name="merDisposeTime*" class="disposeTimeAction" method="merDisposeTime{1}">
+			<result name="merDisposeTimeShow">/backstagePages/presidium/setDisposeTime.jsp</result>
+			<result name="merDisposeTimeSet" type="redirect">/merDisposeTimeShow</result>
+			<result name="input">/backstagePages/presidium/setDisposeTime.jsp</result>
+		</action>
+		
+		<!-- 主席团&成员 -->
+		<!-- 主席团查看成员信息、注销 -->
+		<action name="merShowMember*" class="managerMemberAction" method="merShowMember{1}">
+			<result name="merShowMemberAble">/backstagePages/presidium/validMember.jsp</result>
+			<result name="merShowMemberAbleOut" type="redirect">/merShowMemberAble?deptId=${deptId}</result>
+			<result name="merShowMemberDisable">/backstagePages/presidium/canceledMember.jsp</result>
+			<result name="merShowMemberDisablePass" type="redirect">/merShowMemberDisable?deptId=${deptId}</result>
+		</action>
+		<!-- 新增成员 -->
+		<action name="merCreateMember*" class="managerMemberAction" method="merCreateMember{1}">
+			<result name="merCreateMember">/backstagePages/presidium/createMember.jsp</result>
+			<result name="merCreateMemberSave" type="redirect">/merShowMemberAble?deptId=0</result>
+			<result name="merCreateMemberInput">/backstagePages/presidium/createMember.jsp</result>
+			<result name="input">/backstagePages/presidium/createMember.jsp</result>
+		</action>
+		
+		<!-- 主席团、部长查看成员信息 -->
+		<action name="showMemberById" class="managerMemberAction" method="showMemberById">
+			<result name="showMemberById">/backstagePages/presidium/memberInfo.jsp</result>
+		</action>
+		
+		<!-- 主席团 修改个人资料 -->
+		<action name="mer*BasicInfo" class="memberHandleAction" method="mer{1}BasicInfo">
+			<result name="merModifyBasicInfo">/backstagePages/presidium/basicInfo.jsp</result>
+			<result name="merSaveBasicInfo" type="redirect">/merModifyBasicInfo</result>
+			<result name="input">/backstagePages/presidium/basicInfo.jsp</result>
+		</action>
+		
+		<!-- 修改密码 -->
+		<action name="merChangePassword" class="memberHandleAction" method="merChangePassword">
+			<result name="merChangePassword" type="redirect">/login.jsp</result>
+			<result name="input">/backstagePages/presidium/modifyPassword.jsp</result>
+		</action>
+		
+		
+		<!-- AdminHadnleAction -->
+		<!-- 管理员 处理申请者(按状态从One 到  Nine  同学生会主席) -->
+		<action name="adminHandleOne*" class="adminHandleAction" method="adminHandleOne{1}">
+			<result name="adminHandleOne">/backstagePages/admin/applicationFormManage-untreated.jsp</result>
+			<result name="adminHandleOnePass" type="redirect">/adminHandleOne?deptId=${deptId}</result>
+			<result name="adminHandleOneOut" type="redirect">/adminHandleOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleTwo*" class="adminHandleAction" method="adminHandleTwo{1}">
+			<result name="adminHandleTwo">/backstagePages/admin/applicationFormManage-passed.jsp</result>
+			<result name="adminHandleTwoOut" type="redirect">/adminHandleTwo?deptId=${deptId}</result>
+			<result name="adminHandleTwoOne">/backstagePages/admin/firstInterview-untreated.jsp</result>
+			<result name="adminHandleTwoOnePass" type="redirect">/adminHandleTwoOne?deptId=${deptId}</result>
+			<result name="adminHandleTwoOneOut" type="redirect">/adminHandleTwoOne?deptId=${deptId}</result>
+			<result name="adminHandleTwoOneAdjusted">/backstagePages/admin/firstInterview-adjusted.jsp</result>
+			<result name="adminHandleTwoOneAdjust" type="redirect">/adminHandleTwoOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleThree*" class="adminHandleAction" method="adminHandleThree{1}">
+			<result name="adminHandleThree">/backstagePages/admin/applicationFormManage-failed.jsp</result>
+			<result name="adminHandleThreePass" type="redirect">/adminHandleThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleFour*" class="adminHandleAction" method="adminHandleFour{1}">
+			<result name="adminHandleFourOne">/backstagePages/admin/firstInterview-passed.jsp</result>
+			<result name="adminHandleFourOneOut" type="redirect">/adminHandleFourOne?deptId=${deptId}</result>
+			<result name="adminHandleFourTwo">/backstagePages/admin/secondInterview-untreated.jsp</result>
+			<result name="adminHandleFourTwoAdjust" type="redirect">/adminHandleFourTwo?deptId=${deptId}</result>
+			<result name="adminHandleFourTwoPass" type="redirect">/adminHandleFourTwo?deptId=${deptId}</result>
+			<result name="adminHandleFourTwoOut" type="redirect">/adminHandleFourTwo?deptId=${deptId}</result>
+			<result name="adminHandleFourTwoAdjusted">/backstagePages/admin/secondInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="adminHandleFive*" class="adminHandleAction" method="adminHandleFive{1}">
+			<result name="adminHandleFiveOne">/backstagePages/admin/firstInterview-failed.jsp</result>
+			<result name="adminHandleFiveOnePass" type="redirect">/adminHandleFiveOne?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleSix*" class="adminHandleAction" method="adminHandleSix{1}">
+			<result name="adminHandleSixTwo">/backstagePages/admin/secondInterview-passed.jsp</result>
+			<result name="adminHandleSixTwoOut" type="redirect">/adminHandleSixTwo?deptId=${deptId}</result>
+			<result name="adminHandleSixThree">/backstagePages/admin/thirdInterview-untreated.jsp</result>
+			<result name="adminHandleSixThreeAdjusted">/backstagePages/admin/thirdInterview-adjusted.jsp</result>
+			<result name="adminHandleSixThreeAdjust" type="redirect">/adminHandleSixThree?deptId=${deptId}</result>
+			<result name="adminHandleSixThreePass" type="redirect">/adminHandleSixThree?deptId=${deptId}</result>
+			<result name="adminHandleSixThreeOut" type="redirect">/adminHandleSixThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleSeven*" class="adminHandleAction" method="adminHandleSeven{1}">
+			<result name="adminHandleSevenTwo">/backstagePages/admin/secondInterview-failed.jsp</result>
+			<result name="adminHandleSevenTwoPass" type="redirect">/adminHandleSevenTwo?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleEight*" class="adminHandleAction" method="adminHandleEight{1}">
+			<result name="adminHandleEightThree">/backstagePages/admin/thirdInterview-passed.jsp</result>
+			<result name="adminHandleEightThreeOut" type="redirect">/adminHandleEightThree?deptId=${deptId}</result>
+			<result name="adminHandleEightFour">/backstagePages/admin/passed.jsp</result>
+			<result name="adminHandleEightFourTurn" type="redirect">/adminHandleEightFour?deptId=${deptId}</result>
+			<result name="adminHandleEightFourTurnAll" type="redirect">/adminHandleEightFour?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleNine*" class="adminHandleAction" method="adminHandleNine{1}">
+			<result name="adminHandleNineThree">/backstagePages/admin/thirdInterview-failed.jsp</result>
+			<result name="adminHandleNineThreePass" type="redirect">/adminHandleNineThree?deptId=${deptId}</result>
+		</action>
+		
+		<action name="adminHandleFailFour*" class="adminHandleAction" method="adminHandleFailFour{1}">
+			<result name="adminHandleFailFour">/backstagePages/admin/failed.jsp</result>
+			<result name="adminHandleFailFourDes" type="redirect">/adminHandleFailFour?deptId=${deptId}</result>
+			<result name="adminHandleFailFourDesAll" type="redirect">/adminHandleFailFour?deptId=${deptId}</result>
+		</action>
+		
+		<!-- 发送邮件 -->
+		<action name="email*Admin" class="sendEmailAction" method="email{1}Admin">
+			<result name="emailSingleTwoAdmin" type="redirect">/adminHandleTwo?deptId=${deptId}</result>
+			<result name="emailTwoAdmin" type="redirect">/adminHandleTwo?deptId=${deptId}</result>
+			<result name="emailSingleThreeAdmin" type="redirect">/adminHandleThree?deptId=${deptId}</result>
+			<result name="emailThreeAdmin" type="redirect">/adminHandleThree?deptId=${deptId}</result>
+			
+			<result name="emailSingleTwoAdjustedAdmin" type="redirect">/adminHandleTwoOneAdjusted?deptId=${deptId}</result>
+			<result name="emailTwoAdjustedAdmin" type="redirect">/adminHandleTwoOneAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleFourAdmin" type="redirect">/adminHandleFourOne?deptId=${deptId}</result>
+			<result name="emailFourAdmin" type="redirect">/adminHandleFourOne?deptId=${deptId}</result>
+			<result name="emailSingleFiveAdmin" type="redirect">/adminHandleFiveOne?deptId=${deptId}</result>
+			<result name="emailFiveAdmin" type="redirect">/adminHandleFiveOne?deptId=${deptId}</result>
+			
+			<result name="emailSingleFourAdjustedAdmin" type="redirect">/adminHandleFourTwoAdjusted?deptId=${deptId}</result>
+			<result name="emailFourAdjustedAdmin" type="redirect">/adminHandleFourTwoAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleSixAdmin" type="redirect">/adminHandleSixTwo?deptId=${deptId}</result>
+			<result name="emailSixAdmin" type="redirect">/adminHandleSixTwo?deptId=${deptId}</result>
+			<result name="emailSingleSevenAdmin" type="redirect">/adminHandleSevenTwo?deptId=${deptId}</result>
+			<result name="emailSevenAdmin" type="redirect">/adminHandleSevenTwo?deptId=${deptId}</result>
+			
+			<result name="emailSingleSixAdjustedAdmin" type="redirect">/adminHandleSixThreeAdjusted?deptId=${deptId}</result>
+			<result name="emailSixAdjustedAdmin" type="redirect">/adminHandleSixThreeAdjusted?deptId=${deptId}</result>
+			<result name="emailSingleEightAdmin" type="redirect">/adminHandleEightThree?deptId=${deptId}</result>
+			<result name="emailEightAdmin" type="redirect">/adminHandleEightThree?deptId=${deptId}</result>
+			<result name="emailSingleNineAdmin" type="redirect">/adminHandleNineThree?deptId=${deptId}</result>
+			<result name="emailNineAdmin" type="redirect">/adminHandleNineThree?deptId=${deptId}</result>
+		</action>
+		
+		<!-- 修改密码 -->
+		<action name="adminChangePassword" class="adminHandleAction" method="adminChangePassword">
+			<result name="adminChangePassword">/login.jsp</result>
+			<result name="input">/backstagePages/admin/modifyPassword.jsp</result>
+		</action>
+		
+		<!-- 设置报名系统时间 -->
+		<action name="adminEnrollTime*" class="enrollTimeAction" method="adminEnrollTime{1}">
+			<result name="adminEnrollTimeShow">/backstagePages/admin/setApplyTime.jsp</result>
+			<result name="adminEnrollTimeSet" type="redirect">/adminEnrollTimeShow</result>
+			<result name="input">/backstagePages/admin/setApplyTime.jsp</result>
+		</action>
+		
+		<!-- 设置处理系统时间 -->
+		<action name="adminDisposeTime*" class="disposeTimeAction" method="adminDisposeTime{1}">
+			<result name="adminDisposeTimeShow">/backstagePages/admin/setDisposeTime.jsp</result>
+			<result name="adminDisposeTimeSet" type="redirect">/adminDisposeTimeShow</result>
+			<result name="input">/backstagePages/admin/setDisposeTime.jsp</result>
+		</action>
+		
+		<!-- 管理员修改申请者信息 -->
+		<action name="adminApt*" class="adminHandleAction" method="adminApt{1}">
+			<result name="adminAptShow">/backstagePages/admin/applicationForm.jsp</result>
+			<result name="adminAptModify" type="redirect">/adminAptShow?id=${id}</result>
+			<result name="input">/backstagePages/admin/applicationForm.jsp</result>
+			<result name="adminAptModifyInput">/backstagePages/admin/applicationForm.jsp</result>
+		</action>
+		
+		<!-- 管理员&成员 -->
+		<!-- 管理员查看成员/注销成员信息 -->
+		<action name="adminShowMember*" class="managerMemberAction" method="adminShowMember{1}">
+			<result name="adminShowMemberAble">/backstagePages/admin/validMember.jsp</result>
+			<result name="adminShowMemberAbleOut" type="redirect">/adminShowMemberAble?deptId=${deptId}</result>
+			<result name="adminShowMemberDisable">/backstagePages/admin/canceledMember.jsp</result>
+			<result name="adminShowMemberDisablePass" type="redirect">/adminShowMemberDisable?deptId=${deptId}</result>
+			<result name="adminShowMemberById">/backstagePages/admin/memberBasicInfo.jsp</result>
+			<result name="adminShowMemberByIdInput">/backstagePages/admin/memberBasicInfo.jsp</result>
+			<result name="adminShowMemberByIdSave" type="redirect">/adminShowMemberById?id=${id}</result>
+			<result name="adminShowMemberShowAccount">/backstagePages/admin/memberAccountInfo.jsp</result>
+			<result name="adminShowMemberModifyAccount" type="redirect">/adminShowMemberById?id=${id}</result>
+			<result name="adminShowMemberShowAccountInput">/backstagePages/admin/memberAccountInfo.jsp</result>
+		</action>
+		
+		<!-- 新增成员 -->
+		<action name="adminCreateMember*" class="managerMemberAction" method="adminCreateMember{1}">
+			<result name="adminCreateMember">/backstagePages/admin/createMember.jsp</result>
+			<result name="adminCreateMemberSave" type="redirect">/adminShowMemberAble?deptId=0</result>
+			<result name="adminCreateMemberInput">/backstagePages/admin/createMember.jsp</result>
+			<result name="input">/backstagePages/admin/createMember.jsp</result>
+		</action>
+		
+		<!-- SecretaryHandleAction -->
+		<!-- 部长 处理申请者(按状态从One 到  Nine  同学生会主席) -->
+		<action name="secHandleOne*" class="secretaryHandleAction" method="secHandleOne{1}">
+			<result name="secHandleOne">/backstagePages/secretariat/applicationFormManage-untreated.jsp</result>
+			<result name="secHandleOnePass" type="redirect">/secHandleOne</result>
+			<result name="secHandleOneOut" type="redirect">/secHandleOne</result>
+		</action>
+		
+		<action name="secHandleTwo*" class="secretaryHandleAction" method="secHandleTwo{1}">
+			<result name="secHandleTwo">/backstagePages/secretariat/applicationFormManage-passed.jsp</result>
+			<result name="secHandleTwoOut" type="redirect">/secHandleTwo</result>
+			<result name="secHandleTwoOne">/backstagePages/secretariat/firstInterview-untreated.jsp</result>
+			<result name="secHandleTwoOnePass" type="redirect">/secHandleTwoOne</result>
+			<result name="secHandleTwoOneOut" type="redirect">/secHandleTwoOne</result>
+			<result name="secHandleTwoOneAdjusted">/backstagePages/secretariat/firstInterview-adjusted.jsp</result>
+			<result name="secHandleTwoOneAdjust" type="redirect">/secHandleTwoOne</result>
+		</action>
+		
+		<action name="secHandleThree*" class="secretaryHandleAction" method="secHandleThree{1}">
+			<result name="secHandleThree">/backstagePages/secretariat/applicationFormManage-failed.jsp</result>
+			<result name="secHandleThreePass" type="redirect">/secHandleThree</result>
+		</action>
+		
+		<action name="secHandleFour*" class="secretaryHandleAction" method="secHandleFour{1}">
+			<result name="secHandleFourOne">/backstagePages/secretariat/firstInterview-passed.jsp</result>
+			<result name="secHandleFourOneOut" type="redirect">/secHandleFourOne</result>
+			<result name="secHandleFourTwo">/backstagePages/secretariat/secondInterview-untreated.jsp</result>
+			<result name="secHandleFourTwoAdjust" type="redirect">/secHandleFourTwo</result>
+			<result name="secHandleFourTwoPass" type="redirect">/secHandleFourTwo</result>
+			<result name="secHandleFourTwoOut" type="redirect">/secHandleFourTwo</result>
+			<result name="secHandleFourTwoAdjusted">/backstagePages/secretariat/secondInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="secHandleFive*" class="secretaryHandleAction" method="secHandleFive{1}">
+			<result name="secHandleFiveOne">/backstagePages/secretariat/firstInterview-failed.jsp</result>
+			<result name="secHandleFiveOnePass" type="redirect">/secHandleFiveOne</result>
+		</action>
+		
+		<action name="secHandleSix*" class="secretaryHandleAction" method="secHandleSix{1}">
+			<result name="secHandleSixTwo">/backstagePages/secretariat/secondInterview-passed.jsp</result>
+			<result name="secHandleSixTwoOut" type="redirect">/secHandleSixTwo</result>
+			<result name="secHandleSixThree">/backstagePages/secretariat/thirdInterview-untreated.jsp</result>
+			<result name="secHandleSixThreeAdjusted">/backstagePages/secretariat/thirdInterview-adjusted.jsp</result>
+			<result name="secHandleSixThreeAdjust" type="redirect">/secHandleSixThree</result>
+			<result name="secHandleSixThreePass" type="redirect">/secHandleSixThree</result>
+			<result name="secHandleSixThreeOut" type="redirect">/secHandleSixThree</result>
+		</action>
+		
+		<action name="secHandleSeven*" class="secretaryHandleAction" method="secHandleSeven{1}">
+			<result name="secHandleSevenTwo">/backstagePages/secretariat/secondInterview-failed.jsp</result>
+			<result name="secHandleSevenTwoPass" type="redirect">/secHandleSevenTwo</result>
+		</action>
+		
+		<action name="secHandleEight*" class="secretaryHandleAction" method="secHandleEight{1}">
+			<result name="secHandleEightThree">/backstagePages/secretariat/thirdInterview-passed.jsp</result>
+			<result name="secHandleEightThreeOut" type="redirect">/secHandleEightThree</result>
+			<result name="secHandleEightFour">/backstagePages/secretariat/passed.jsp</result>
+			<result name="secHandleEightFourTurn" type="redirect">/secHandleEightFour</result>
+			<result name="secHandleEightFourTurnAll" type="redirect">/secHandleEightFour</result>
+		</action>
+		
+		<action name="secHandleNine*" class="secretaryHandleAction" method="secHandleNine{1}">
+			<result name="secHandleNineThree">/backstagePages/secretariat/thirdInterview-failed.jsp</result>
+			<result name="secHandleNineThreePass" type="redirect">/secHandleNineThree</result>
+		</action>
+		
+		<action name="secHandleFailFour*" class="secretaryHandleAction" method="secHandleFailFour{1}">
+			<result name="secHandleFailFour">/backstagePages/secretariat/failed.jsp</result>
+			<result name="secHandleFailFourDes" type="redirect">/secHandleFailFour</result>
+			<result name="secHandleFailFourDesAll" type="redirect">/secHandleFailFour</result>
+		</action>
+		
+		<!--发送邮件  -->
+		<action name="email*Sec" class="sendEmailAction" method="email{1}Sec">
+			<result name="emailSingleTwoSec" type="redirect">/secHandleTwo</result>
+			<result name="emailTwoSec" type="redirect">/secHandleTwo</result>
+			<result name="emailSingleThreeSec" type="redirect">/secHandleThree</result>
+			<result name="emailThreeSec" type="redirect">/secHandleThree</result>
+			
+			<result name="emailSingleTwoAdjustedSec" type="redirect">/secHandleTwoOneAdjusted</result>
+			<result name="emailTwoAdjustedSec" type="redirect">/secHandleTwoOneAdjusted</result>
+			<result name="emailSingleFourSec" type="redirect">/secHandleFourOne</result>
+			<result name="emailFourSec" type="redirect">/secHandleFourOne</result>
+			<result name="emailSingleFiveSec" type="redirect">/secHandleFiveOne</result>
+			<result name="emailFiveSec" type="redirect">/secHandleFiveOne</result>
+			
+			<result name="emailSingleFourAdjustedSec" type="redirect">/secHandleFourTwoAdjusted</result>
+			<result name="emailFourAdjustedSec" type="redirect">/secHandleFourTwoAdjusted</result>
+			<result name="emailSingleSixSec" type="redirect">/secHandleSixTwo</result>
+			<result name="emailSixSec" type="redirect">/secHandleSixTwo</result>
+			<result name="emailSingleSevenSec" type="redirect">/secHandleSevenTwo</result>
+			<result name="emailSevenSec" type="redirect">/secHandleSevenTwo</result>
+			
+			<result name="emailSingleSixAdjustedSec" type="redirect">/secHandleSixThreeAdjusted</result>
+			<result name="emailSixAdjustedSec" type="redirect">/secHandleSixThreeAdjusted</result>
+			<result name="emailSingleEightSec" type="redirect">/secHandleEightThree</result>
+			<result name="emailEightSec" type="redirect">/secHandleEightThree</result>
+			<result name="emailSingleNineSec" type="redirect">/secHandleNineThree</result>
+			<result name="emailNineSec" type="redirect">/secHandleNineThree</result>
+		</action>
+		
+		<!-- 设置报名系统时间 -->
+		<action name="secEnrollTime*" class="enrollTimeAction" method="secEnrollTime{1}">
+			<result name="secEnrollTimeShow">/backstagePages/secretariat/setApplyTime.jsp</result>
+			<result name="secEnrollTimeSet" type="redirect">/secEnrollTimeShow</result>
+			<result name="input">/backstagePages/secretariat/setApplyTime.jsp</result>
+		</action>
+		
+		<!-- 设置处理系统时间 -->
+		<action name="secDisposeTime*" class="disposeTimeAction" method="secDisposeTime{1}">
+			<result name="secDisposeTimeShow">/backstagePages/secretariat/setDisposeTime.jsp</result>
+			<result name="secDisposeTimeSet" type="redirect">/secDisposeTimeShow</result>
+			<result name="input">/backstagePages/secretariat/setDisposeTime.jsp</result>
+		</action>
+		
+		<!-- 部长&成员 -->
+		<!-- 部长查看成员信息、注销 -->
+		<action name="secShowMember*" class="managerMemberAction" method="secShowMember{1}">
+			<result name="secShowMemberAble">/backstagePages/secretariat/validMember.jsp</result>
+			<result name="secShowMemberAbleOut" type="redirect">/secShowMemberAble</result>
+			<result name="secShowMemberDisable">/backstagePages/secretariat/canceledMember.jsp</result>
+			<result name="secShowMemberDisablePass" type="redirect">/secShowMemberDisable</result>
+		</action>
+		<!-- 新增成员 -->
+		<action name="secCreateMember*" class="managerMemberAction" method="secCreateMember{1}">
+			<result name="secCreateMember">/backstagePages/secretariat/createMember.jsp</result>
+			<result name="secCreateMemberSave" type="redirect">/merShowMemberAble</result>
+			<result name="secCreateMemberInput">/backstagePages/secretariat/createMember.jsp</result>
+			<result name="input">/backstagePages/secretariat/createMember.jsp</result>
+		</action>
+		
+		<!-- 部长修改个人资料 -->
+		<action name="sec*BasicInfo" class="secretaryHandleAction" method="sec{1}BasicInfo">
+			<result name="secModifyBasicInfo">/backstagePages/secretariat/basicInfo.jsp</result>
+			<result name="secSaveBasicInfo" type="redirect">/secModifyBasicInfo</result>
+			<result name="input">/backstagePages/secretariat/basicInfo.jsp</result>
+		</action>
+		
+		<!-- 修改密码 -->
+		<action name="secChangePassword" class="secretaryHandleAction" method="secChangePassword">
+			<result name="secChangePassword">/login.jsp</result>
+			<result name="input">/backstagePages/secretariat/modifyPassword.jsp</result>
+		</action>
+		
+		<!-- CadreHandleAction -->
+		<!-- 干事 处理申请者(按状态从One 到  Nine  同学生会主席) -->
+		<action name="cadHandleOne*" class="cadreHandleAction" method="cadHandleOne{1}">
+			<result name="cadHandleOne">/backstagePages/undersecretary/applicationFormManage-untreated.jsp</result>
+		</action>
+		
+		<action name="cadHandleTwo*" class="cadreHandleAction" method="cadHandleTwo{1}">
+			<result name="cadHandleTwo">/backstagePages/undersecretary/applicationFormManage-passed.jsp</result>
+			<result name="cadHandleTwoOne">/backstagePages/undersecretary/firstInterview-untreated.jsp</result>
+			<result name="cadHandleTwoOneAdjusted">/backstagePages/undersecretary/firstInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="cadHandleThree*" class="cadreHandleAction" method="cadHandleThree{1}">
+			<result name="cadHandleThree">/backstagePages/undersecretary/applicationFormManage-failed.jsp</result>
+		</action>
+		
+		<action name="cadHandleFour*" class="cadreHandleAction" method="cadHandleFour{1}">
+			<result name="cadHandleFourOne">/backstagePages/undersecretary/firstInterview-passed.jsp</result>
+			<result name="cadHandleFourTwo">/backstagePages/undersecretary/secondInterview-untreated.jsp</result>
+			<result name="cadHandleFourTwoAdjusted">/backstagePages/undersecretary/secondInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="cadHandleFive*" class="cadreHandleAction" method="cadHandleFive{1}">
+			<result name="cadHandleFiveOne">/backstagePages/undersecretary/firstInterview-failed.jsp</result>
+		</action>
+		
+		<action name="cadHandleSix*" class="cadreHandleAction" method="cadHandleSix{1}">
+			<result name="cadHandleSixTwo">/backstagePages/undersecretary/secondInterview-passed.jsp</result>
+			<result name="cadHandleSixThree">/backstagePages/undersecretary/thirdInterview-untreated.jsp</result>
+			<result name="cadHandleSixThreeAdjusted">/backstagePages/undersecretary/thirdInterview-adjusted.jsp</result>
+		</action>
+		
+		<action name="cadHandleSeven*" class="cadreHandleAction" method="cadHandleSeven{1}">
+			<result name="cadHandleSevenTwo">/backstagePages/undersecretary/secondInterview-failed.jsp</result>
+		</action>
+		
+		<action name="cadHandleEight*" class="cadreHandleAction" method="cadHandleEight{1}">
+			<result name="cadHandleEightThree">/backstagePages/undersecretary/thirdInterview-passed.jsp</result>
+			<result name="cadHandleEightFour">/backstagePages/undersecretary/passed.jsp</result>
+		</action>
+		
+		<action name="cadHandleNine*" class="cadreHandleAction" method="cadHandleNine{1}">
+			<result name="cadHandleNineThree">/backstagePages/undersecretary/thirdInterview-failed.jsp</result>
+		</action>
+		
+		<action name="cadHandleFailFour*" class="cadreHandleAction" method="cadHandleFailFour{1}">
+			<result name="cadHandleFailFour">/backstagePages/undersecretary/failed.jsp</result>
+		</action>
+		
+		<!-- 干事修改个人资料 -->
+		<action name="cad*BasicInfo" class="cadreHandleAction" method="cad{1}BasicInfo">
+			<result name="cadModifyBasicInfo">/backstagePages/undersecretary/basicInfo.jsp</result>
+			<result name="cadSaveBasicInfo" type="redirect">/cadModifyBasicInfo</result>
+			<result name="input">/backstagePages/undersecretary/basicInfo.jsp</result>
+		</action>
+		
+		<!-- 干事修改密码 -->
+		<action name="cadChangePassword" class="cadreHandleAction" method="cadChangePassword">
+			<result name="cadChangePassword">/login.jsp</result>
+			<result name="input">/backstagePages/undersecretary/modifyPassword.jsp</result>
+		</action>
+		
+		
+		
+		<!--所有身份 账号退出登录 -->
+		<action name="loginDestory" class="memberHandleAction" method="loginDestory">
+			<result name="loginDestory">/login.jsp</result>
+		</action>
+		
+		<!-- 下载数据 （Zip） -->
+		<action name="createWordAll" class="wordAction" method="createWordAll">
+			<result name="createWordAll" type="redirectAction">
+				<param name="actionName">downloadZip</param> 
+    			<param name="filePath">${filePath}</param>
+    			<param name="zipPath">${zipPath}</param>
+    			<param name="zipOnlyName">${zipOnlyName}</param>
+    			<param name="encode">true</param>
+			</result>
+		</action>
+		
+		<action name="downloadZip" class="wordAction" method="downloadZip">
+			<result name="downloadZip" type="stream">
+				<param name="contentDisposition">attachment;filename="${zipName}"</param>
+				<param name="inputName">zipFile</param>
+			</result>
+			<result name="input">/notFound.jsp</result>
+		</action>
+		
+		<!-- 下载数据 (word)-->
+		<action name="createWordSingle" class="wordAction" method="createWordSingle">
+			<result name="createWordSingle" type="redirectAction">
+				<param name="actionName">downloadWord</param> 
+    			<param name="filePath">${filePath}</param>
+				<param name="fileOnlyName">${fileOnlyName}</param>
+				<param name="fileName">${fileName}</param>
+    			<param name="encode">true</param>
+			</result>
+		</action>
+		
+		<action name="downloadWord" class="wordAction" method="downloadWord">
+			<result name="downloadWord" type="stream">
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="inputName">wordFile</param>
+			</result>
+			<result name="input">/notFound.jsp</result>
+		</action>
+		
+		<!-- 下载数据 (excel)-->
+		<action name="createExcelSingle" class="wordAction" method="createExcelSingle">
+			<result name="createExcelSingle" type="redirectAction">
+				<param name="actionName">downloadWord</param> 
+    			<param name="filePath">${filePath}</param>
+				<param name="fileOnlyName">${fileOnlyName}</param>
+				<param name="fileName">${fileName}</param>
+    			<param name="encode">true</param>
+			</result>
+		</action>
+		
+		<!-- 下载数据 (excel-成员)-->
+		<action name="createMemberExcelSingle" class="wordAction" method="createMemberExcelSingle">
+			<result name="createMemberExcelSingle" type="redirectAction">
+				<param name="actionName">downloadWord</param> 
+    			<param name="filePath">${filePath}</param>
+				<param name="fileOnlyName">${fileOnlyName}</param>
+				<param name="fileName">${fileName}</param>
+    			<param name="encode">true</param>
+			</result>
+		</action>
+		
+		<!-- 找回密码-发送验证码 -->
+		<action name="sendICode" class="sendEmailAction" method="sendICode">
+			<result name="sendICode" type="redirect">
+				<param name="location">/resetPassword.jsp</param> 
+    			<param name="username">${username}</param>
+			</result>
+			<result name="sendICodeInput">/forgotPassword.jsp</result>
+			<result name="input">/forgotPassword.jsp</result>
+		</action>
+		
+		<action name="checkICode" class="sendEmailAction" method="checkICode">
+			<result name="checkICode" type="redirect">/login.jsp</result>
+			<result name="input">/resetPassword.jsp</result>
+		</action>
+    </package>
+
+</struts>

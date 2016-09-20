@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-8-14 11:08:47 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="com.gyxsh.entities.MerStatus" table="MER_STATUS">
+        <id name="merStatusId" type="java.lang.Integer">
+            <column name="MER_STATUS_ID" />
+            <generator class="native" />
+        </id>
+        <property name="merStatusName" type="java.lang.String">
+            <column name="MER_STATUS_NAME" />
+        </property>
+    </class>
+</hibernate-mapping>

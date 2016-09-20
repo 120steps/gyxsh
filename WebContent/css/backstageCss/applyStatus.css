@@ -1,0 +1,98 @@
+.right-content{
+	background-color: #FFFFFF;
+	padding: 30px 40px;
+	min-height: 300px;
+}
+
+.status-content{
+	list-style: none;
+	display: table;
+    table-layout: fixed;
+    width: 100%;
+    font-size: 14px;
+    padding-left: 0px;
+}
+.status-content .status-step{
+	position: relative;
+    z-index: 1;
+    display: table-cell;
+    color: #aaa;
+    vertical-align: top;
+}
+.status-content .status-step.pass{
+	color: #333;
+}
+.status-content .status-step:after{
+	content: "";
+    position: absolute;
+    left: 0;
+    top: 18px;
+    z-index: -1;
+    width: 100%;
+    height: 2px;
+    background-color: #f4f3f3;
+}
+.status-content .status-step.pass:after{
+	background: #6AD4F3;
+}
+.status-content .status-step:last-child{
+	width: 50px;
+}
+.status-content .status-step:last-child:after{
+	height: 0;
+}
+.status-content .status-step .num{
+	width: 36px;
+    height: 36px;
+    margin-bottom: 5px;
+    line-height: 36px;
+    font-size: 18px;
+    text-align: center;
+    background: url(../../img/done_fail.png) 0 -139px no-repeat #f4f3f3;
+    border-radius: 25px;
+}
+.status-content .status-step.pass .num,.status-content .status-step.fail .num{
+	line-height: 100px;
+    overflow: hidden;
+    color: #fff;
+    border-color: #6AD4F3;
+}
+.status-content .status-step.pass .num{
+	background-color: #6AD4F3;
+    background-position: 0 0;
+}
+.status-content .status-step.fail .num{
+	background-color: transparent;
+    background-position: -46px 0;
+}
+.status-content .status-step .title{
+	width: 150px;
+    margin-left: -57px;
+    text-align: center;
+}
+.tip{
+	font-size: 11px;
+    position: absolute;
+    padding: 5px;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+}
+.status-content .status-step .tip{
+	position: relative;
+    color: #4c4c4c;
+    font-size: 14px;
+    margin-left: -90px;
+    text-align: center;
+    width: 220px;
+    top: 80px;
+}
+.status-content .status-step.current:before,.status-content .status-step.fail:before{
+	content: "";
+    position: absolute;
+    left: 18px;
+    top: 58px;
+    z-index: -1;
+    border-left: 1px #ccc dashed;
+    height: 80px;
+}

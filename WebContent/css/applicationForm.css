@@ -1,0 +1,179 @@
+body{
+	padding-top: 74px;
+}
+.container{
+	width: 1170px;
+}
+.navbar-custom{
+	background-color: #6AD4F3;
+	border: 0;
+	border-radius: 0;
+}
+@media only screen and (max-width: 768px) {
+	.navbar-custom{
+		min-height: 54px;
+	}
+	.new-brand {
+	padding: 2px 15px;
+	height: 50px;
+	}
+	.navbar-custom .navbar-header{
+		height: 54px;
+	}
+	.navbar-custom .navbar-header .navbar-toggle{
+		margin-top: 10px;
+	}
+}
+.new-brand{
+	padding: 2px 15px;
+	height: 50px;
+}
+.new-brand img{
+	display: block;
+	height: 50px;
+	width: 150px;
+}
+.navbar-custom .department-menu li a{
+	padding: 15px 13px;
+	font-size: 16px;
+	color: #FFFFFF;
+	border: 2px solid transparent;
+	cursor: pointer;
+}
+.navbar-custom .department-menu .active a{
+	background-color: #FFFFFF;
+	color: #6AD4F3;
+	border: 2px solid #6AD4F3;
+	border-bottom-color: transparent;
+}
+.navbar-custom .department-menu .active a:hover{
+	background-color: #FFFFFF;
+}
+.headTitle{
+	border-bottom: 2px solid #E7E7E7;
+	margin: 20px 0;
+}
+.headTitle h3{
+	margin-bottom: 0;
+	border-bottom: 2px solid #6AD4F3;
+	margin-bottom: -2px;
+	padding: 0 20px 5px 0;
+}
+.warnDiv{
+	margin: 30px 0;
+}
+.warnDiv div{
+	font-size: 16px;
+}
+.form-content{
+	background-color: #F1F0F0;
+	padding: 19px;
+	border: 1px solid #E7E7E7;
+	border-radius: 4px;
+	box-shadow: inset 0px 1px 1px rgba(0,0,0,.3);
+}
+.form-horizontal .danger-label{
+	font-weight: normal;
+	text-align: left;
+	color: #EA3835;
+	/* display: none; */
+}
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+	background-color: #6AD4F3;
+	color: #FFFFFF;
+}
+.dropdown-menu>.active>a,.dropdown-menu>.active>a:focus,.dropdown-menu>.active>a:hover{
+	background-color: #6AD4F3;
+}
+.dropdown-menu>.active>a{
+	outline: 1px dotted #FFFFFF;
+	outline-offset: -2px;
+}
+.hr{
+	margin: 20px 0;
+	border-top: 1px solid #FFFFFF;
+}
+textarea{
+	resize: none;
+}
+.formBtn{
+	text-align: center;
+	margin: 30px 0;
+}
+.formBtn .btn{
+	margin: 0 10px;
+}
+.danger-state label{
+	color: #EA3835;
+}
+.danger-state input,.danger-state .input-group input,.danger-state .input-group span,.danger-state textarea,.danger-state select{
+	border-color: #EA3835;
+}
+.danger-state .danger-label{
+	display: inline-block;
+}
+.bootstrap-select>.dropdown-info{
+	border-color: #EA3835;
+}
+.toTop{
+	position: fixed;
+	right: 0;
+	bottom: 100px;
+	border: 1px solid #E7E7E7;
+	box-shadow: -2px 2px 5px 3px #f3f3f3;
+}
+.toTop span{
+	display: block;
+	padding: 9px;
+	color: #787d82;
+	cursor: pointer;
+}
+.btn-group{
+	width: 100%;
+}
+.btn-group button{
+	width: 100%;
+	text-align: left;
+}
+.btn-group button span.caret{
+	margin-top: 8px;
+}
+.dropdown-menu>li>a{
+	padding-left: 13px;
+	padding-right: 13px;
+}
+.apImage{
+	position: absolute;
+	left: -160px;
+	top: 63px;
+	width: 140px;
+}
+.apImage p{
+	text-align: center;
+}
+.apImage .img-title{
+	font-weight: 700;
+	margin-bottom: 8px;
+}
+.apImage img{
+	border: 1px solid #C7C3C3;
+	width: 140px;
+	height: 170px;
+	margin-bottom: 10px;
+}
+input[type="file"]{
+	display: none;
+}
+.apImage .img-btn {
+	width: 100px;
+	height: 25px;
+	padding: 0;
+	line-height: 25px;
+}
+.apImage .explain{
+	margin-bottom: 3px;
+	color: #A29F9F;
+}
+.apImage .warning-info{
+	color: #EA3835;
+}
